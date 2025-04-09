@@ -1,10 +1,18 @@
 import crypto from 'crypto';
 
-export const hashIP = (ip: string): string => {
-  return crypto
-    .createHash('sha256')
-    .update(ip + process.env.VITE_IP_SALT)
-    .digest('hex');
+// Browser-compatible hashing function
+const hashString = async (str: string): Promise<string> => {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(str);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+};
+
+export const hashIP = async (ip: string): Promise<string> => {
+  const salt = import.meta.env.VITE_IP_SALT || '';
+  return hashString(ip + salt);
 };
 
 export const isValidEmail = (email: string): boolean => {
