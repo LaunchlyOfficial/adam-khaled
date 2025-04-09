@@ -1,0 +1,68 @@
+{
+  "rules": {
+    "subscribers": {
+      ".read": "auth != null",
+      ".write": true,
+      "$subscription": {
+        ".validate": "newData.hasChildren(['email', 'timestamp', 'ipHash']) && 
+                     newData.child('email').isString() && 
+                     newData.child('email').val().matches(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$/) && 
+                     newData.child('timestamp').isString() &&
+                     newData.child('ipHash').isString() &&
+                     (!data.exists() || data.child('ipHash').val() != newData.child('ipHash').val() || 
+                      root.child('rateLimit').child(newData.child('ipHash').val()).child('lastSubmission').val() < (now - 300000))"
+      }
+    },
+    "contacts": {
+      ".read": true,
+      ".write": true,
+      "$contact": {
+        ".validate": "newData.hasChildren(['name', 'email', 'message', 'timestamp', 'status']) &&
+                     newData.child('name').isString() &&
+                     newData.child('email').isString() &&
+                     newData.child('email').val().matches(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$/) &&
+                     newData.child('message').isString() &&
+                     newData.child('timestamp').isString() &&
+                     newData.child('status').isString()"
+      }
+    },
+    "bookings": {
+      ".read": true,
+      ".write": true,
+      "$booking": {
+        ".validate": "newData.hasChildren(['name', 'email', 'date', 'time', 'timestamp', 'status']) &&
+                     newData.child('name').isString() &&
+                     newData.child('email').isString() &&
+                     newData.child('email').val().matches(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$/) &&
+                     newData.child('date').isString() &&
+                     newData.child('time').isString() &&
+                     newData.child('timestamp').isString() &&
+                     newData.child('status').isString()"
+      }
+    },
+    "chatbot": {
+      "messages": {
+        ".read": true,
+        ".write": true,
+        "$message": {
+          ".validate": "newData.hasChildren(['text', 'sender', 'timestamp']) &&
+                       newData.child('text').isString() &&
+                       newData.child('sender').isString() &&
+                       newData.child('sender').val().matches(/^(user|bot)$/) &&
+                       newData.child('timestamp').isNumber()"
+        }
+      }
+    },
+    "rateLimit": {
+      "$ip": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['lastSubmission']) &&
+                     newData.child('lastSubmission').isNumber() &&
+                     newData.child('lastSubmission').val() <= now",
+        "lastSubmission": {
+          ".validate": "newData.isNumber()"
+        }
+      }
+    }
+  }
+}

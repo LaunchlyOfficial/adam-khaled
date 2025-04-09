@@ -1,0 +1,15 @@
+name: apifornighthawk
+service:
+  name: web
+  ports:
+    - port: 8000
+      protocol: http
+  routes:
+    - path: /
+      protocol: http
+  instance_type: free
+  scaling:
+    min_instances: 0
+    max_instances: 1
+  regions:
+    - fra 
