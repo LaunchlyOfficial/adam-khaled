@@ -1,18 +1,42 @@
 import OpenAI from 'openai';
 
+// Debug environment variables
+console.log('Environment variables:', {
+  VITE_OPENAI_API_KEY: import.meta.env.VITE_OPENAI_API_KEY ? 'Set' : 'Not set',
+  VITE_OPENAI_MODEL: import.meta.env.VITE_OPENAI_MODEL,
+  VITE_IP_SALT: import.meta.env.VITE_IP_SALT ? 'Set' : 'Not set'
+});
+
 const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 const OPENAI_MODEL = import.meta.env.VITE_OPENAI_MODEL || 'gpt-4-turbo-preview';
 
+let openaiClient;
+
 if (!OPENAI_API_KEY) {
   console.error('OpenAI API key is not set in environment variables');
-  throw new Error('OpenAI API key is required');
+  // Instead of throwing, we'll create a mock client for development
+  if (import.meta.env.DEV) {
+    console.warn('Running in development mode with mock OpenAI client');
+    openaiClient = {
+      chat: {
+        completions: {
+          create: async () => ({
+            choices: [{ message: { content: 'This is a mock response in development mode.' } }]
+          })
+        }
+      }
+    };
+  } else {
+    throw new Error('OpenAI API key is required in production');
+  }
+} else {
+  openaiClient = new OpenAI({
+    apiKey: OPENAI_API_KEY,
+    dangerouslyAllowBrowser: true
+  });
 }
 
-export const openai = new OpenAI({
-  apiKey: OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true
-});
-
+export const openai = openaiClient;
 export const MODEL = OPENAI_MODEL;
 
 export const SYSTEM_PROMPT = `You are Adam Khaled, a Business Growth Expert and founder of successful companies. Your core values are:
