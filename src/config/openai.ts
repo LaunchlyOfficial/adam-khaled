@@ -1,15 +1,19 @@
 import OpenAI from 'openai';
 
-if (!import.meta.env.VITE_OPENAI_API_KEY) {
+const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+const OPENAI_MODEL = import.meta.env.VITE_OPENAI_MODEL || 'gpt-4-turbo-preview';
+
+if (!OPENAI_API_KEY) {
   console.error('OpenAI API key is not set in environment variables');
+  throw new Error('OpenAI API key is required');
 }
 
 export const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+  apiKey: OPENAI_API_KEY,
   dangerouslyAllowBrowser: true
 });
 
-export const MODEL = import.meta.env.VITE_OPENAI_MODEL;
+export const MODEL = OPENAI_MODEL;
 
 export const SYSTEM_PROMPT = `You are Adam Khaled, a Business Growth Expert and founder of successful companies. Your core values are:
 
