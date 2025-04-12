@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ref, onValue, off, set, get } from 'firebase/database';
+import { ref, onValue, off, set, get, DataSnapshot } from 'firebase/database';
 import { database } from '../config/firebase';
 import { hashIP, getRateLimitKey } from '../utils/security';
 
@@ -11,7 +11,7 @@ export function useFirebaseData<T>(path: string) {
   useEffect(() => {
     const dbRef = ref(database, path);
 
-    const handleData = (snapshot: any) => {
+    const handleData = (snapshot: DataSnapshot) => {
       setData(snapshot.val());
       setLoading(false);
     };
@@ -42,7 +42,7 @@ export function useFirebaseData<T>(path: string) {
 }
 
 export async function checkRateLimit(ipAddress: string): Promise<boolean> {
-  const ipHash = hashIP(ipAddress);
+  const ipHash = await hashIP(ipAddress);
   const rateLimitRef = ref(database, getRateLimitKey(ipHash));
   const snapshot = await get(rateLimitRef);
   
@@ -56,7 +56,7 @@ export async function checkRateLimit(ipAddress: string): Promise<boolean> {
 }
 
 export async function updateRateLimit(ipAddress: string): Promise<void> {
-  const ipHash = hashIP(ipAddress);
+  const ipHash = await hashIP(ipAddress);
   const rateLimitRef = ref(database, getRateLimitKey(ipHash));
   await set(rateLimitRef, {
     lastSubmission: Date.now()

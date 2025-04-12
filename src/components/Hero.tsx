@@ -64,7 +64,7 @@ export default function Hero() {
           <div className="max-w-3xl">
             <div className="flex items-center gap-4 mb-8">
               <img
-                src="https://pbs.twimg.com/profile_images/1859376911773782016/LxqTzCYe_400x400.jpg"
+                src="/src/assets/Adam.jpg"
                 alt="Adam Khaled"
                 className="w-20 h-20 rounded-full border-2 border-accent shadow-xl"
               />

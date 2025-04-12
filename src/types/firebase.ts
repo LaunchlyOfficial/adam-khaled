@@ -12,6 +12,6 @@ export interface FirebaseConfig {
 export interface AnalyticsEvent {
   name: string;
   params?: {
-    [key: string]: any;
+    [key: string]: string | number | boolean | null | undefined;
   };
 }

@@ -28,7 +28,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-8 md:mb-0">
             <img 
-              src="https://cdn.prod.website-files.com/672f358b16d8e1864cc8fef2/672f3d48c03d722c786a4f5d_webclip.jpg"
+              src="/src/assets/footer.png"
               alt="Logo"
               className="h-12 w-auto mb-2"
             />

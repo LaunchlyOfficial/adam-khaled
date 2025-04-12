@@ -23,6 +23,12 @@ export default defineConfig({
         assetFileNames: 'assets/[name]-[hash].[ext]'
       },
     },
+    target: 'esnext',
+    minify: 'terser',
+    cssCodeSplit: true,
+    modulePreload: {
+      polyfill: true
+    }
   },
   server: {
     port: 8000,

@@ -3,7 +3,6 @@ import { Mail, Send } from 'lucide-react';
 import { ref, push } from 'firebase/database';
 import { database } from '../config/firebase';
 import { useAnalytics } from '../hooks/useAnalytics';
-import { checkRateLimit, updateRateLimit } from '../hooks/useFirebase';
 import { isValidEmail } from '../utils/security';
 
 interface FormData {

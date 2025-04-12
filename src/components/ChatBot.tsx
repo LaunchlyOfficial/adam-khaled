@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, Send, X, Minimize2, Maximize2 } from 'lucide-react';
 import { openai, MODEL, SYSTEM_PROMPT } from '../config/openai';
 import ReactMarkdown from 'react-markdown';
-import { saveChatMessage, getChatHistory, ChatMessage } from '../utils/chatStorage';
+import { saveChatMessage, getChatHistory } from '../utils/chatStorage';
 
 const DELAY_TIMES = [3000, 4000, 5000, 6000, 8000];
 
@@ -26,8 +26,8 @@ export default function ChatBot() {
 
   useEffect(() => {
     if (isOpen && isFirstMessage) {
-      const initialMessage = {
-        role: 'assistant',
+      const initialMessage: Message = {
+        role: 'assistant' as const,
         content: "Hey! I'm Adam. What's your name?",
         id: 'initial-greeting'
       };
@@ -41,7 +41,7 @@ export default function ChatBot() {
         userName: 'system'
       });
     }
-  }, [isOpen]);
+  }, [isOpen, isFirstMessage]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
